@@ -30,18 +30,13 @@ void setup() {
   }
 }
 
-void playNote(int pin){
-  digitalWrite(ledSeq[pin], HIGH);
-  tone(TONEPIN, tonSeq[pin]); // Ended here
-}
-
 void giveInstructions(){
   for (int step = 0; step < level; step++){
     playNote(sequence[step]);
   }
   int newNote = random(4);
   playNote (newNote);
-  sequence[level];
+  sequence[level] = newNote;
   level++;
 }
 
