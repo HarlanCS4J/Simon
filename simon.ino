@@ -1,3 +1,5 @@
+  // When I press a button, it beeps 5 times, then always fails
+  
   // Define our four lights
   #define LED_RED     2
   #define LED_GRE     3
@@ -21,12 +23,43 @@
   int sequence [DIFF_MODE];
 
   int level = 0;
+  int pause = 250;
 
-  
 void setup() {
   for(int pin=0; pin<4; pin++){
     pinMode(ledSeq[pin], OUTPUT); //Set LEDs for output
-    pinMode(btnSeq[pin], INPUT);  //Set buttons for input
+    pinMode(btnSeq[pin], INPUT_PULLUP);  //Set buttons for input
+  }
+  randomSeed(analogRead(0));
+}
+
+void playNote(int note){
+  tone(TONEPIN,tonSeq[note]);
+  digitalWrite(ledSeq[note], HIGH);
+  delay(pause);
+  noTone(TONEPIN);
+  digitalWrite(ledSeq[note], LOW);
+}
+
+void lose(){}
+
+void getInput(){
+  int button = -1;
+  for (int step = 0; step < level; step++){
+    while (button = -1){
+      for(int pin=0; pin<4; pin++){
+        if (digitalRead(btnSeq[pin]) == HIGH){
+          button = pin;
+          playNote(pin);
+        }
+      }
+    }
+    if (button == sequence[step]){
+      button = -1;
+    } else {
+      lose();
+      step = level + 1;
+    }
   }
 }
 
@@ -40,30 +73,7 @@ void giveInstructions(){
   level++;
 }
 
-bool getInput(){
-}
-
 void loop() {
-  // put your main code here, to run repeatedly:
-  // for(int pin=0; pin<4; pin++){
-  //   if (digitalRead(btnSeq[pin]) == HIGH){
-
-  //   } else {
-  //     digitalWrite(ledSeq[pin], LOW);
-  //     noTone(TONEPIN);
-  //   } 
-  // }
   giveInstructions();
   getInput();
 }
-
-
-
-
-
-
-
-
-
-
-
